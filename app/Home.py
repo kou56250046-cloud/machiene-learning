@@ -37,6 +37,8 @@ PAGES = [
     st.Page("views/lab8_tabular.py", title="8 テーブルデータ", icon="📋", url_path="tabular"),
     st.Page("views/lab9_timeseries.py", title="9 時系列", icon="📉", url_path="timeseries"),
     st.Page("views/lab10_text.py", title="10 テキスト", icon="📰", url_path="text"),
+    st.Page("views/lab11_imaging.py", title="11 画像・信号", icon="🖼️", url_path="imaging"),
+    st.Page("views/experiments.py", title="実験ログ", icon="🧾", url_path="experiments"),
 ]
 
 st.navigation(
@@ -44,6 +46,7 @@ st.navigation(
         "ML LAB": PAGES[:1],
         "基礎ラボ": PAGES[1:8],
         "データ基盤": PAGES[8:9],
-        "応用ラボ": PAGES[9:],
+        "応用ラボ": PAGES[9:13],
+        "記録": PAGES[13:],
     }
 ).run()

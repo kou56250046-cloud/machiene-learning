@@ -11,6 +11,7 @@ import pandas as pd
 import streamlit as st
 
 from app.components import tabular_plots as TabP
+from app.components import experiment_log as EL
 from app.components import text_plots as P
 from app.components.cards import Kpi, kpi_row, score_color
 from app.components.explain import explain
@@ -192,6 +193,10 @@ if vocabulary_size < 20:
         f"語彙が {vocabulary_size} 語しかありません — 設定が厳しすぎるか、文書数が足りません。",
         tone="warn",
     )
+
+# 分類タブで求めた成績を、ページ末尾の記録欄でも使うため外に置いておく
+classification_accuracy: float | None = None
+classification_baseline: float | None = None
 
 tabs = st.tabs(["言葉を数える", "語のつながり", "話題を見つける", "分類してみる"])
 
@@ -440,6 +445,8 @@ with tabs[3]:
             vectorized, frame[label_column],
         )
         baseline = TX.majority_baseline(frame[label_column])
+        classification_accuracy = result.accuracy
+        classification_baseline = baseline
 
         kpi_row(
             [
@@ -490,5 +497,38 @@ with tabs[3]:
             "納得できる語が並んでいれば、モデルは妥当な根拠で判断しています。"
             "無関係な語が上位なら、データの偏りを拾っている可能性を疑ってください。"
         )
+
+# ======================================================================
+# 実験の記録
+# ======================================================================
+
+EL.record_panel(
+    lab="テキスト",
+    params={
+        "データ": dataset_name,
+        "本文の列": used_columns,
+        "品詞": [TX.POS_LABELS[p] for p in tokenize_config.pos],
+        "基本形に揃える": use_base_form,
+        "ストップワード除去": remove_stopwords,
+        "min_df": int(min_df),
+        "max_df": float(max_df),
+        "トピック数": int(n_topics),
+        "トピック手法": TX.TOPIC_METHODS[topic_method],
+    },
+    metrics={
+        "語彙数": float(vocabulary_size),
+        "平均語数": float(lengths.mean()),
+        **(
+            {
+                "分類の正解率": classification_accuracy,
+                "ベースライン超え": classification_accuracy - classification_baseline,
+            }
+            if classification_accuracy is not None
+            else {}
+        ),
+    },
+    key=KEY,
+    default_experiment=f"テキスト/{dataset_name}",
+)
 
 explain("text")

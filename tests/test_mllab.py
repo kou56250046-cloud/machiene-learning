@@ -245,7 +245,7 @@ def test_apply_registers_template() -> None:
 
 
 def test_every_lab_has_a_color() -> None:
-    for lab in range(12):
+    for lab in range(14):
         assert theme.LAB_COLORS[lab] in theme.ACCENTS
 
 

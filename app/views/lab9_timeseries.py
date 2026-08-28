@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from app.components import experiment_log as EL
 from app.components import timeseries_plots as P
 from app.components.cards import Kpi, kpi_row, score_color
 from app.components.explain import explain
@@ -481,5 +482,31 @@ with tab_forecast:
             "「1点前」が突出していれば、モデルは実質ナイーブ予測をしています。"
             "カレンダー特徴が上位に来るなら、季節性を学習できている証拠です。"
         )
+
+# ======================================================================
+# 実験の記録
+# ======================================================================
+
+EL.record_panel(
+    lab="時系列",
+    params={
+        "データ": dataset_name,
+        "観測値": value_column,
+        "粒度": TS.FREQUENCIES[frequency][1],
+        "周期": int(period),
+        "予測期間": int(horizon),
+        "ラグ数": int(n_lags),
+        "カレンダー特徴": use_calendar,
+        "分割数": int(n_splits),
+    },
+    metrics={
+        f"最良R2({best.label})": best.mean("R2"),
+        "ナイーブとの差": best_learned.mean("R2") - naive.mean("R2"),
+        **({"季節性の強さ": decomposition.seasonal_strength} if decomposition else {}),
+        **({"トレンドの強さ": decomposition.trend_strength} if decomposition else {}),
+    },
+    key=KEY,
+    default_experiment=f"時系列/{dataset_name}",
+)
 
 explain("timeseries")

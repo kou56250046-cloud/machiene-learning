@@ -11,6 +11,7 @@ import pandas as pd
 import streamlit as st
 from sklearn.model_selection import train_test_split
 
+from app.components import experiment_log as EL
 from app.components import tabular_plots as P
 from app.components.cards import Kpi, kpi_row, score_color
 from app.components.explain import explain
@@ -520,5 +521,30 @@ with tab_explain:
                     f"各特徴量の寄与を足し引きして `{explanation.base_value + total:.4g}` に至っています。"
                     "ピンクが押し上げ、水色が押し下げです。"
                 )
+
+# ======================================================================
+# 実験の記録
+# ======================================================================
+
+EL.record_panel(
+    lab="テーブルデータ",
+    params={
+        "データ": source_key,
+        "目的変数": target,
+        "モデル": T.MODELS[model_key].label,
+        "欠測の注入率": missing_rate,
+        "数値の補完": T.NUMERIC_IMPUTE_LABELS[numeric_impute],
+        "カテゴリの符号化": T.ENCODE_LABELS[encode],
+        "分割数": int(n_splits),
+        "シード": int(seed),
+    },
+    metrics={
+        f"交差検証({cv.metric})": cv.mean,
+        "分割のばらつき": cv.std,
+        **{m.label: scores.get(m.key, float("nan")) for m in metrics},
+    },
+    key=KEY,
+    default_experiment=f"テーブル/{source_key.split(':')[-1]}",
+)
 
 explain("tabular")

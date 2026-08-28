@@ -10,6 +10,8 @@ __pycache__/
 data/raw/*
 data/interim/*
 data/processed/*
+# 実験ログも同じ。取り直せるうえ、手元の試行履歴は個人のもの
+data/experiments/*
 !data/**/.gitkeep
 
 # ローカル設定
