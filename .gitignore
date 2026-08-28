@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# データ（生成物・取得物は追跡しない）
+data/raw/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+
+# ローカル設定
+.streamlit/secrets.toml
+.env
+.env.local
+
+# OS
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,420 @@
+/* ML Lab — ダークダッシュボード
+   色は mllab/viz/theme.py の値と一致させること。
+   :root の変数を書き換えれば全体の配色が変わる。 */
+
+:root {
+  --bg: #0b0b10;
+  --surface: #15151f;
+  --surface-alt: #101018;
+  --border: #26263a;
+  --text: #e8e8f0;
+  --muted: #8a8aa3;
+
+  --cyan: #4dd8ff;
+  --pink: #ff4d9d;
+  --lime: #a8f04b;
+  --orange: #ff9a3c;
+  --purple: #a96bff;
+
+  --radius: 14px;
+}
+
+/* ---------- ベース ---------- */
+
+.stApp {
+  background:
+    radial-gradient(1100px 620px at 12% -10%, rgba(169, 107, 255, 0.13), transparent 60%),
+    radial-gradient(900px 520px at 88% 0%, rgba(77, 216, 255, 0.10), transparent 60%),
+    var(--bg);
+}
+
+.block-container {
+  padding-top: 2.2rem;
+  padding-bottom: 4rem;
+  max-width: 1400px;
+}
+
+/* ---------- サイドバー ---------- */
+
+section[data-testid="stSidebar"] {
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border);
+}
+
+section[data-testid="stSidebar"] .block-container {
+  padding-top: 1.4rem;
+}
+
+/* サイドバーのセクション見出し */
+.mllab-side-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.35rem 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mllab-side-head::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent, var(--cyan));
+  box-shadow: 0 0 10px var(--accent, var(--cyan));
+  flex: none;
+}
+
+/* ---------- ページヘッダ ---------- */
+
+.mllab-header {
+  border-left: 4px solid var(--accent, var(--cyan));
+  padding: 0.15rem 0 0.15rem 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.mllab-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent, var(--cyan));
+  margin-bottom: 0.3rem;
+}
+
+.mllab-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  color: var(--text);
+  margin: 0 0 0.4rem;
+}
+
+.mllab-lede {
+  font-size: 0.94rem;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 78ch;
+  margin: 0;
+}
+
+/* ---------- KPI カード ---------- */
+
+.mllab-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 0.85rem;
+  margin: 0.4rem 0 1.6rem;
+}
+
+.mllab-kpi {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem 0.95rem 1.25rem;
+  overflow: hidden;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.mllab-kpi::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--accent, var(--cyan));
+}
+
+.mllab-kpi:hover {
+  border-color: var(--accent, var(--cyan));
+  box-shadow: 0 0 0 1px var(--accent, var(--cyan)), 0 8px 26px -14px var(--accent, var(--cyan));
+  transform: translateY(-1px);
+}
+
+.mllab-kpi-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mllab-kpi-value {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--accent, var(--text));
+  font-variant-numeric: tabular-nums;
+}
+
+.mllab-kpi-value .unit {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-left: 0.15rem;
+}
+
+.mllab-kpi-sub {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ---------- パネル（図やテキストの容れ物） ---------- */
+
+.mllab-panel-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 1.6rem 0 0.5rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mllab-panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.mllab-panel-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ---------- 解説ブロック ---------- */
+
+.mllab-explain {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent, var(--cyan));
+  border-radius: var(--radius);
+  padding: 1.15rem 1.5rem 1.25rem;
+  margin-top: 1.8rem;
+}
+
+.mllab-explain h2 {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--accent, var(--cyan));
+  margin: 1.4rem 0 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.mllab-explain h2:first-child {
+  margin-top: 0;
+}
+
+.mllab-explain h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 1.1rem 0 0.35rem;
+}
+
+.mllab-explain p,
+.mllab-explain li {
+  font-size: 0.9rem;
+  line-height: 1.85;
+  color: #cfcfe0;
+}
+
+.mllab-explain ul,
+.mllab-explain ol {
+  padding-left: 1.35rem;
+  margin: 0.3rem 0 0.8rem;
+}
+
+.mllab-explain strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.mllab-explain code {
+  background: rgba(77, 216, 255, 0.1);
+  color: var(--cyan);
+  border-radius: 5px;
+  padding: 0.08em 0.4em;
+  font-size: 0.86em;
+}
+
+.mllab-explain table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.85rem;
+}
+
+.mllab-explain th,
+.mllab-explain td {
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+}
+
+.mllab-explain th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.mllab-explain blockquote {
+  border-left: 3px solid var(--orange);
+  background: rgba(255, 154, 60, 0.07);
+  margin: 0.8rem 0;
+  padding: 0.6rem 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.mllab-explain blockquote p {
+  margin: 0;
+  color: var(--text);
+}
+
+/* ---------- Streamlit ウィジェットの調整 ---------- */
+
+div[data-testid="stMetric"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.stTabs [data-baseweb="tab"] {
+  border-radius: 9px 9px 0 0;
+  padding: 0.45rem 1rem;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.stTabs [aria-selected="true"] {
+  color: var(--text);
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent, var(--cyan));
+}
+
+div[data-testid="stExpander"] details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* データフレーム・図の角丸 */
+div[data-testid="stPlotlyChart"],
+div[data-testid="stDataFrame"] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(21, 21, 31, 0.55);
+  padding: 0.35rem;
+  overflow: hidden;
+}
+
+/* 余分な余白を詰める */
+hr {
+  border-color: var(--border);
+  margin: 1.6rem 0;
+}
+
+/* ---------- ホームのラボ一覧カード ---------- */
+
+.mllab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 0.6rem 0 1rem;
+}
+
+.mllab-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem 1.2rem 1.4rem;
+  overflow: hidden;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.mllab-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--accent, var(--cyan));
+}
+
+.mllab-card:hover {
+  border-color: var(--accent, var(--cyan));
+  box-shadow: 0 10px 34px -18px var(--accent, var(--cyan));
+  transform: translateY(-2px);
+}
+
+.mllab-card-num {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--accent, var(--cyan));
+  margin-bottom: 0.35rem;
+}
+
+.mllab-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.45rem;
+}
+
+.mllab-card-body {
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.mllab-card-body b {
+  color: #cfcfe0;
+  font-weight: 700;
+}
+
+/* ---------- 注意書きバッジ ---------- */
+
+.mllab-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 154, 60, 0.1);
+  border: 1px solid rgba(255, 154, 60, 0.4);
+  color: var(--orange);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin: 0.3rem 0 0.6rem;
+}
+
+.mllab-note.good {
+  background: rgba(168, 240, 75, 0.1);
+  border-color: rgba(168, 240, 75, 0.4);
+  color: var(--lime);
+}
+
+.mllab-note.bad {
+  background: rgba(255, 77, 157, 0.1);
+  border-color: rgba(255, 77, 157, 0.4);
+  color: var(--pink);
+}
