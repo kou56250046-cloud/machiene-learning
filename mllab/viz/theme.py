@@ -70,7 +70,8 @@ LAB_COLORS: dict[int, str] = {
     7: PURPLE,
     8: LIME,    # テーブルデータラボ
     9: PINK,    # 時系列ラボ
-    10: CYAN,   # データカタログ
+    10: ORANGE, # テキストラボ
+    11: CYAN,   # データカタログ
 }
 
 

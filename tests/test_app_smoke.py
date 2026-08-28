@@ -31,6 +31,7 @@ PAGES = [
     "catalog.py",
     "lab8_tabular.py",
     "lab9_timeseries.py",
+    "lab10_text.py",
 ]
 
 # t-SNE や全モデルのスイープがあるので、ページによっては数十秒かかる

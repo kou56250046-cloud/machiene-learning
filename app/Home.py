@@ -36,6 +36,7 @@ PAGES = [
     st.Page("views/catalog.py", title="データカタログ", icon="🗄️", url_path="catalog"),
     st.Page("views/lab8_tabular.py", title="8 テーブルデータ", icon="📋", url_path="tabular"),
     st.Page("views/lab9_timeseries.py", title="9 時系列", icon="📉", url_path="timeseries"),
+    st.Page("views/lab10_text.py", title="10 テキスト", icon="📰", url_path="text"),
 ]
 
 st.navigation(

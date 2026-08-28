@@ -37,15 +37,22 @@ accent = page_header(
 
 sidebar_section("データ")
 
-candidates = [
-    dataset
-    for dataset in store.list_datasets()
-    if TS.find_time_columns(store.load(dataset.name))
-]
+def _is_usable(name: str) -> bool:
+    """日時の列と、数値の観測値の両方を持つデータだけを候補にする。
+
+    ニュース記事のように日時はあるが数値が無いデータを候補に出すと、
+    選んだ瞬間にエラーになってしまう。
+    """
+    loaded = store.load(name)
+    time_columns = TS.find_time_columns(loaded)
+    return bool(time_columns) and bool(TS.find_value_columns(loaded, time_columns[0]))
+
+
+candidates = [d for d in store.list_datasets() if _is_usable(d.name)]
 
 if not candidates:
     st.warning(
-        "日時の列を持つデータがカタログにありません。"
+        "日時の列と数値の観測値を両方持つデータがカタログにありません。"
         "**データカタログ**で「気象データ」または「株価・指数」を取得してください。",
         icon="📭",
     )
