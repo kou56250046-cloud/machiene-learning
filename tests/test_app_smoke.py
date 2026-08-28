@@ -29,6 +29,7 @@ PAGES = [
     "lab6_metrics.py",
     "lab7_ensemble.py",
     "catalog.py",
+    "lab8_tabular.py",
 ]
 
 # t-SNE や全モデルのスイープがあるので、ページによっては数十秒かかる
@@ -188,3 +189,59 @@ def test_catalog_sql_examples_match_saved_tables(tmp_path, monkeypatch) -> None:
         except Exception as exc:  # noqa: BLE001
             raise AssertionError(f"例文『{title}』が実行できない: {exc}") from exc
         assert any(n in sql for n in names), f"例文『{title}』が実在テーブルを参照していない"
+
+
+# ---- ウィジェットの key 衝突を静的に検出する ---------------------------
+
+def _literal_keys(path: Path) -> list[str]:
+    """ページ内の `key=...` を、f 文字列を展開しつつ集める。
+
+    Streamlit は同じ key が 2 つあると実行時に落ちる。実際にその分岐を
+    通らないと気づけないので、ソースを読んで先に見つける。
+    """
+    import ast
+
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    # KEY = "lab8" のようなモジュール定数を拾って f 文字列の展開に使う
+    constants: dict[str, str] = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and isinstance(node.value.value, str):
+                    constants[target.id] = node.value.value
+
+    def render(node: ast.AST) -> str | None:
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            return node.value
+        if isinstance(node, ast.JoinedStr):
+            parts: list[str] = []
+            for piece in node.values:
+                if isinstance(piece, ast.Constant):
+                    parts.append(str(piece.value))
+                elif isinstance(piece, ast.FormattedValue):
+                    inner = piece.value
+                    if isinstance(inner, ast.Name) and inner.id in constants:
+                        parts.append(constants[inner.id])
+                    else:
+                        # 実行時にしか決まらない部分。衝突しない印を置く
+                        return None
+            return "".join(parts)
+        return None
+
+    keys: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        for keyword in node.keywords:
+            if keyword.arg == "key":
+                rendered = render(keyword.value)
+                if rendered is not None:
+                    keys.append(rendered)
+    return keys
+
+
+@pytest.mark.parametrize("page", PAGES, ids=lambda p: p)
+def test_no_duplicate_widget_keys(page: str) -> None:
+    keys = _literal_keys(VIEWS / page)
+    duplicates = sorted({k for k in keys if keys.count(k) > 1})
+    assert not duplicates, f"{page} に重複した key があります: {duplicates}"

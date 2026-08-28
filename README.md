@@ -23,6 +23,7 @@ uv run streamlit run app/Home.py
 | 5 | 次元削減ラボ | t-SNE の見た目が perplexity で激変すること |
 | 6 | 評価指標ラボ | 「精度 98%」がなぜ嘘になりうるか |
 | 7 | アンサンブルラボ | 弱い学習器の足し合わせが強い境界を作ること |
+| 8 | テーブルデータラボ | 実データの前処理・評価・解釈（SHAP）の一通り |
 
 ## データ基盤（Phase 2）
 
@@ -77,7 +78,6 @@ uv run pytest -m network  # 外部 API に実際に繋ぐテスト
 
 ## 今後
 
-- **Phase 3** テーブルデータラボ（欠測処理・特徴量エンジニアリング・LightGBM・SHAP）
 - **Phase 4** 時系列ラボ（季節分解・自己相関・ラグ特徴量・TimeSeriesSplit）
 - **Phase 5** テキストラボ（形態素解析・TF-IDF・トピックモデル）
 - **Phase 6** 画像・信号ラボ（フィルタ・HOG・FFT）
