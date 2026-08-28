@@ -12,6 +12,10 @@ dependencies = [
     "numpy>=1.26,<2.2",
     "scipy>=1.13",
     "matplotlib>=3.9",
+    "duckdb>=1.5.5",
+    "pyarrow>=25.0.1",
+    "httpx>=0.28.1",
+    "feedparser>=6.0.14",
 ]
 
 [dependency-groups]
@@ -28,3 +32,7 @@ packages = ["mllab"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# 実通信するテストは既定で除外する（取得元が落ちていても赤くしない）。
+# 動かすときは: uv run pytest -m network
+addopts = "-m 'not network'"
+markers = ["network: 外部 API へ実際に接続するテスト"]

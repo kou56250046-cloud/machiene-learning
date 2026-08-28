@@ -28,6 +28,7 @@ PAGES = [
     "lab5_dimreduction.py",
     "lab6_metrics.py",
     "lab7_ensemble.py",
+    "catalog.py",
 ]
 
 # t-SNE や全モデルのスイープがあるので、ページによっては数十秒かかる
@@ -102,3 +103,88 @@ def test_every_lab_shows_kpi_cards() -> None:
     for page in PAGES[1:]:
         html = _html_of(_run(page))
         assert "mllab-kpi" in html, f"{page} に KPI カードがない"
+
+
+# ---- カタログはデータの有無で表示が変わるので両方見る ------------------
+
+def _seed_store(tmp_path) -> None:
+    """テスト用の保存先に、気象と株価に見立てたデータを 1 件ずつ置く。"""
+    import numpy as np
+    import pandas as pd
+
+    from mllab.data import store
+
+    store.RAW_DIR = tmp_path / "raw"
+    store.PROCESSED_DIR = tmp_path / "processed"
+    store.ensure_dirs()
+
+    days = pd.date_range("2024-01-01", periods=120, freq="D")
+    rng = np.random.default_rng(0)
+    store.save(
+        "weather_tokyo",
+        pd.DataFrame(
+            {
+                "日付": days,
+                "都市": "東京",
+                "最高気温": rng.normal(20, 8, 120).round(1),
+                "平均気温": rng.normal(15, 8, 120).round(1),
+                "降水量": rng.gamma(1, 3, 120).round(1),
+            }
+        ),
+        label="気象データ", source="テスト", domain="timeseries",
+        params={"city": "tokyo"},
+    )
+    store.save(
+        "market_n225",
+        pd.DataFrame(
+            {
+                "日付": days,
+                "銘柄": "日経平均株価",
+                "終値": rng.normal(38000, 500, 120).round(1),
+                "前日比(%)": rng.normal(0, 1, 120).round(3),
+            }
+        ),
+        label="株価・指数", source="テスト", domain="timeseries",
+        params={"symbol": "^N225"},
+    )
+
+
+def test_catalog_renders_with_saved_data(tmp_path, monkeypatch) -> None:
+    """保存済みデータがあるときの一覧・プレビュー・SQL タブが落ちないこと。"""
+    from mllab.data import store
+
+    monkeypatch.setattr(store, "RAW_DIR", tmp_path / "raw")
+    monkeypatch.setattr(store, "PROCESSED_DIR", tmp_path / "processed")
+    _seed_store(tmp_path)
+
+    at = _run("catalog.py")
+    _assert_clean(at, "catalog.py（データあり）")
+
+    html = _html_of(at)
+    assert "mllab-kpi" in html
+    # 保存済みテーブル名が SQL タブの案内に出ている
+    body = " ".join(str(m.value) for m in at.get("caption"))
+    assert "weather_tokyo" in body and "market_n225" in body
+
+
+def test_catalog_sql_examples_match_saved_tables(tmp_path, monkeypatch) -> None:
+    """例文が、実在するテーブル名だけを参照していること。"""
+    from app.components import sql_examples
+    from mllab.data import store
+
+    monkeypatch.setattr(store, "RAW_DIR", tmp_path / "raw")
+    monkeypatch.setattr(store, "PROCESSED_DIR", tmp_path / "processed")
+    _seed_store(tmp_path)
+
+    stored = store.list_datasets()
+    examples = sql_examples.build(stored)
+    assert examples, "例文が 1 つも作られていない"
+
+    names = {d.name for d in stored}
+    for title, sql in examples.items():
+        # 例文はすべて実行できなければならない（テーブル名・列名の綴り間違い検出）
+        try:
+            store.query(sql)
+        except Exception as exc:  # noqa: BLE001
+            raise AssertionError(f"例文『{title}』が実行できない: {exc}") from exc
+        assert any(n in sql for n in names), f"例文『{title}』が実在テーブルを参照していない"

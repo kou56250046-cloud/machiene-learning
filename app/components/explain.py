@@ -66,9 +66,28 @@ def markdown_to_html(text: str) -> str:
         buffer = []
         mode = None
 
-    for raw in text.splitlines():
+    lines = text.splitlines()
+    index = 0
+    while index < len(lines):
+        raw = lines[index]
+        index += 1
         line = raw.rstrip()
         stripped = line.strip()
+
+        # ``` で囲まれたコードブロック。中身はそのまま出す。
+        if stripped.startswith("```"):
+            flush()
+            language = stripped[3:].strip()
+            block: list[str] = []
+            while index < len(lines) and not lines[index].strip().startswith("```"):
+                block.append(lines[index])
+                index += 1
+            index += 1  # 閉じの ``` を読み飛ばす
+            css_class = f' class="language-{html.escape(language)}"' if language else ""
+            out.append(
+                f"<pre><code{css_class}>{html.escape(chr(10).join(block))}</code></pre>"
+            )
+            continue
 
         if not stripped:
             flush()

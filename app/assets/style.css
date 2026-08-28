@@ -248,6 +248,25 @@ section[data-testid="stSidebar"] .block-container {
   font-size: 0.86em;
 }
 
+.mllab-explain pre {
+  background: #0d0d15;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 0.6rem 0 1rem;
+  overflow-x: auto;
+}
+
+.mllab-explain pre code {
+  background: none;
+  color: #cfcfe0;
+  padding: 0;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
 .mllab-explain table {
   width: 100%;
   border-collapse: collapse;
