@@ -30,6 +30,7 @@ PAGES = [
     "lab7_ensemble.py",
     "catalog.py",
     "lab8_tabular.py",
+    "lab9_timeseries.py",
 ]
 
 # t-SNE や全モデルのスイープがあるので、ページによっては数十秒かかる

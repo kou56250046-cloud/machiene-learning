@@ -21,7 +21,7 @@ from mllab.viz import theme
 KEY = "catalog"
 
 accent = page_header(
-    number=9,
+    number=10,
     title="データカタログ",
     lede=(
         "外部の公開データを取り込んで Parquet に溜め、SQL で調べられるようにする場所です。"

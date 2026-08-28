@@ -35,8 +35,14 @@ PAGES = [
     st.Page("views/lab7_ensemble.py", title="7 アンサンブル", icon="🌲", url_path="ensemble"),
     st.Page("views/catalog.py", title="データカタログ", icon="🗄️", url_path="catalog"),
     st.Page("views/lab8_tabular.py", title="8 テーブルデータ", icon="📋", url_path="tabular"),
+    st.Page("views/lab9_timeseries.py", title="9 時系列", icon="📉", url_path="timeseries"),
 ]
 
 st.navigation(
-    {"ML LAB": PAGES[:1], "基礎ラボ": PAGES[1:8], "データ基盤": PAGES[8:10]}
+    {
+        "ML LAB": PAGES[:1],
+        "基礎ラボ": PAGES[1:8],
+        "データ基盤": PAGES[8:9],
+        "応用ラボ": PAGES[9:],
+    }
 ).run()

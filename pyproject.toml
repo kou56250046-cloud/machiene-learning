@@ -18,6 +18,7 @@ dependencies = [
     "feedparser>=6.0.14",
     "lightgbm>=4.7.0",
     "shap>=0.51.0",
+    "statsmodels>=0.15.0",
 ]
 
 [dependency-groups]
