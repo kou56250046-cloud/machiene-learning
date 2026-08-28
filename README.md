@@ -5,12 +5,28 @@
 
 ## 起動
 
+**ワンクリックで起動する場合**（Windows）
+
+`scripts/ML Lab を起動.bat` をダブルクリックします。
+デスクトップに置いておくと便利です。ブラウザが自動で開きます。
+終了するときは、開いた黒い画面を閉じてください。
+
+プロジェクトを別の場所へ移した場合は、`.bat` の `PROJECT=` を書き換えてください。
+
+**コマンドから起動する場合**
+
 ```powershell
 uv sync
 uv run streamlit run app/Home.py
 ```
 
 → http://localhost:8501
+
+> **公開 URL では動きません。** Streamlit は Python のサーバープロセスが必要なので、
+> GitHub Pages のような静的ホスティングでは配信できません。ブラウザから URL で
+> 開けるようにしたい場合は Streamlit Community Cloud を使う手がありますが、
+> 無料枠は RAM 1GB で、このアプリの依存（LightGBM・SHAP・scikit-image ほか）には
+> 手狭です。
 
 ## 基礎ラボ（Phase 1）
 
