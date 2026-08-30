@@ -375,4 +375,8 @@ st.caption(
     "**TimeSeriesSplit** は常に過去で学習し未来で検証するので、時系列で未来の情報が漏れるのを防ぎます。"
 )
 
-explain("metrics")
+# 解説の数式に、いまの陽性割合と閾値を差し込む。
+explain(
+    "metrics",
+    values={"pi": float(y_true.mean()), "t": float(threshold)},
+)

@@ -509,4 +509,12 @@ EL.record_panel(
     default_experiment=f"画像/{image_key}",
 )
 
-explain("imaging")
+# 解説の数式に、いまのぼかし具合と標本化周波数を差し込む。
+explain(
+    "imaging",
+    values={
+        "sigma": float(sigma),
+        "fs": int(sample_rate),
+        "nyquist": sample_rate / 2,
+    },
+)

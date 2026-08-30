@@ -207,4 +207,16 @@ else:
     )
     st.plotly_chart(fig_all, width="stretch")
 
-explain("gradient_descent")
+# 解説の数式に、いまの学習率と慣性を差し込む。
+# 慣性を持たない手法のときは β を渡さず、式は記号のままにしておく。
+live: dict[str, object] = {"eta": lr, "steps": steps}
+if optimizer == "momentum":
+    live["beta"] = momentum
+    live["beta_boost"] = 1.0 / max(1.0 - momentum, 1e-9)
+elif optimizer == "adam":
+    live["beta1"] = momentum
+    live["beta2"] = 0.999  # descend() の既定値
+elif optimizer == "rmsprop":
+    live["rho"] = 0.9  # descend() の実装値
+
+explain("gradient_descent", values=live)

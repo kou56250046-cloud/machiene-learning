@@ -13,7 +13,7 @@ d \;\longmapsto\; \bigl(\mathrm{tf}(t_1, d),\, \mathrm{tf}(t_2, d),\, \dots,\, \
 頻度をそのまま使うと「する」「こと」のような語が上位を独占します。そこで **多くの文書に出る語ほど価値を下げます**。
 
 ```math
-\mathrm{idf}(t) = \log\frac{1 + n}{1 + \mathrm{df}(t)} + 1, \qquad
+\mathrm{idf}(t) = \log\frac{1 + @n:n@}{1 + \mathrm{df}(t)} + 1, \qquad
 \mathrm{tfidf}(t, d) = \mathrm{tf}(t, d)\cdot \mathrm{idf}(t)
 ```
 
@@ -54,7 +54,7 @@ d \;\longmapsto\; \bigl(\mathrm{tf}(t_1, d),\, \mathrm{tf}(t_2, d),\, \dots,\, \
 X \;\approx\; W H, \qquad W \ge 0,\; H \ge 0
 ```
 
-`X` が `n × |V|`、`W` が `n × K`（文書ごとのトピック強度）、`H` が `K × |V|`（トピックごとの語の重み）。**非負という制約が「部分の足し合わせ」を強制する** ため、トピックが人の読める形になります（PCA だと負の重みが出て解釈しづらい）。
+`X` が `n × |V|`、`W` が `n × K`（文書ごとのトピック強度）、`H` が `K × |V|`（トピックごとの語の重み）。いまの設定なら `n` = @n:文書数@、`K` = @K:トピック数@ です。**非負という制約が「部分の足し合わせ」を強制する** ため、トピックが人の読める形になります（PCA だと負の重みが出て解釈しづらい）。
 
 **LDA** は同じことを確率モデルで書いたものです。
 

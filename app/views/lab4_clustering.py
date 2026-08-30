@@ -318,4 +318,8 @@ with tab_k:
     )
     st.plotly_chart(fig_s, width="stretch")
 
-explain("clustering")
+# 解説の数式に、いまのクラスタ数と DBSCAN の設定を差し込む。
+explain(
+    "clustering",
+    values={"K": int(k), "eps": float(eps), "minPts": int(min_samples)},
+)

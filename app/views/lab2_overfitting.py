@@ -267,4 +267,10 @@ st.caption(
     f"交差検証で最も誤差が小さいのは **{best_degree} 次** です。"
 )
 
-explain("overfitting")
+# 解説の数式に、いまの次数・正則化の強さ・サンプル数を差し込む。
+# 正則化なしのときは alpha を渡さず、式は記号のままにしておく。
+live: dict[str, object] = {"d": degree, "p": degree, "n": len(X_train)}
+if reg_kind in ("ridge", "lasso"):
+    live[f"alpha_{reg_kind}"] = alpha
+
+explain("overfitting", values=live)

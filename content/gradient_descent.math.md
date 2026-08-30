@@ -1,7 +1,7 @@
 ## 更新式はこれだけ
 
 ```math
-\theta_{t+1} = \theta_t - \eta \, \nabla L(\theta_t)
+\theta_{t+1} = \theta_t - @eta:\eta@ \, \nabla L(\theta_t)
 ```
 
 `∇L` は損失を各パラメータで偏微分したベクトル、つまり「いま立っている地点でいちばん急な **上り** の向き」です。マイナスを付けているので、下り方向へ `η`（学習率）の分だけ動きます。画面の矢印 1 本が、この式 1 回ぶんです。
@@ -37,19 +37,19 @@ L(\theta - \eta g) \;\approx\; L(\theta) \;-\; \eta \lVert g \rVert^{2} \;+\; O(
 ## Momentum — 振動を打ち消す
 
 ```math
-v_{t+1} = \beta v_t + \nabla L(\theta_t), \qquad
-\theta_{t+1} = \theta_t - \eta \, v_{t+1}
+v_{t+1} = @beta:\beta@ \, v_t + \nabla L(\theta_t), \qquad
+\theta_{t+1} = \theta_t - @eta:\eta@ \, v_{t+1}
 ```
 
 `v` は過去の勾配の指数移動平均です（`β = 0.9` なら直近 10 歩ぶんが混ざります）。
 
 - **振動する方向** — 勾配の符号が毎回入れ替わるので、足し合わせると打ち消し合う。
-- **一貫して同じ向きの方向** — 足し合わさって加速する。実効的な歩幅が `1/(1-β)` 倍、`β = 0.9` なら約 10 倍になります。
+- **一貫して同じ向きの方向** — 足し合わさって加速する。実効的な歩幅が `1/(1-β)` 倍、`β = 0.9` なら約 10 倍になります。いまの設定なら約 @beta_boost:β 次第@ 倍です。
 
 ## RMSProp — 方向ごとに歩幅を変える
 
 ```math
-s_{t+1} = \rho \, s_t + (1-\rho)\, g_t^{2}, \qquad
+s_{t+1} = @rho:\rho@ \, s_t + (1-@rho:\rho@)\, g_t^{2}, \qquad
 \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{s_{t+1}} + \varepsilon} \, g_t
 ```
 
@@ -58,8 +58,8 @@ s_{t+1} = \rho \, s_t + (1-\rho)\, g_t^{2}, \qquad
 ## Adam — 両方を持つ
 
 ```math
-m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad
-v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^{2}
+m_t = @beta1:\beta_1@ m_{t-1} + (1-@beta1:\beta_1@) g_t, \qquad
+v_t = @beta2:\beta_2@ v_{t-1} + (1-@beta2:\beta_2@) g_t^{2}
 ```
 
 初期値が 0 のため最初の数歩が小さく偏る問題を、割り算で補正します。

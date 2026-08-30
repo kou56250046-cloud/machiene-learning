@@ -308,4 +308,5 @@ with tab_imp:
         "実務で判断に使うなら Permutation Importance のほうが信頼できます。"
     )
 
-explain("ensemble")
+# 解説の数式に、いまの木の本数を差し込む。
+explain("ensemble", values={"M": int(n_estimators)})

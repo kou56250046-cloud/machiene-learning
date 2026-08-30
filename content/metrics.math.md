@@ -22,7 +22,8 @@ F_\beta = (1 + \beta^{2})\,\frac{\mathrm{Precision} \cdot \mathrm{Recall}}{\beta
 陽性の割合（有病率）を `π` とすると、正解率は次のように分解できます。
 
 ```math
-\mathrm{Accuracy} = \pi \cdot \mathrm{TPR} + (1-\pi)\cdot(1 - \mathrm{FPR})
+\mathrm{Accuracy} = \pi \cdot \mathrm{TPR} + (1-\pi)\cdot(1 - \mathrm{FPR}),
+\qquad \pi = @pi:\pi@
 ```
 
 `π = 0.02` のとき、何も検出しないモデル（`TPR = 0`, `FPR = 0`）でも `Accuracy = 0.98`。**第 2 項だけで 98% を稼げてしまう** ことが式から読めます。正解率が使えるのは `π` が 0.5 付近のときだけです。
@@ -37,7 +38,7 @@ F_\beta = (1 + \beta^{2})\,\frac{\mathrm{Precision} \cdot \mathrm{Recall}}{\beta
 
 ## ROC-AUC の意味
 
-ROC は閾値 `t` を動かしたときの `(FPR(t), TPR(t))` の軌跡です。その面積には、順位で読める解釈があります。
+ROC は閾値 `t` を動かしたときの `(FPR(t), TPR(t))` の軌跡です（いまの閾値は @t:t@）。その面積には、順位で読める解釈があります。
 
 ```math
 \mathrm{AUC} = P\bigl(s(x^{+}) > s(x^{-})\bigr)
@@ -52,7 +53,7 @@ ROC は閾値 `t` を動かしたときの `(FPR(t), TPR(t))` の軌跡です。
 一方 PR 曲線の適合率 `TP/(TP+FP)` に `TN` は現れません。だから陰性を増やしても甘くならない。でたらめなモデルのベースラインも、はっきり `π` になります。
 
 ```math
-\text{ランダムな分類器の PR ベースライン} = \pi
+\text{ランダムな分類器の PR ベースライン} = \pi = @pi:\pi@
 ```
 
 画面の破線がこれです。**PR-AUC は `π` と比べて初めて意味を持ちます**（`π = 0.02` なら PR-AUC 0.3 でも 15 倍の価値がある）。

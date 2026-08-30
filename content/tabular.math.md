@@ -59,9 +59,9 @@ O(n \cdot d) \;\longrightarrow\; O(B \cdot d) \quad (B \ll n)
 ## 交差検証の平均とばらつき
 
 ```math
-\bar{s} = \frac{1}{K}\sum_{k=1}^{K}s_k, \qquad
+\bar{s} = \frac{1}{@K:K@}\sum_{k=1}^{@K:K@}s_k, \qquad
 \mathrm{SD} = \sqrt{\frac{1}{K-1}\sum_k (s_k - \bar{s})^{2}}, \qquad
-\mathrm{SE} = \frac{\mathrm{SD}}{\sqrt{K}}
+\mathrm{SE} = \frac{\mathrm{SD}}{\sqrt{@K:K@}}
 ```
 
 箱ひげ図の箱の高さが `SD` にあたります。**モデル A と B の平均差が `2·SE` に届かないなら、その差は分割の運の範囲内** です。

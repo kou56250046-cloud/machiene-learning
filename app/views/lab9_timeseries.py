@@ -509,4 +509,8 @@ EL.record_panel(
     default_experiment=f"時系列/{dataset_name}",
 )
 
-explain("timeseries")
+# 解説の数式に、いまの系列長・季節周期・予測地平を差し込む。
+explain(
+    "timeseries",
+    values={"n": int(len(series)), "m": int(period), "h": int(horizon)},
+)

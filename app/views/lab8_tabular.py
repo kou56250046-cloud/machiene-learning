@@ -547,4 +547,5 @@ EL.record_panel(
     default_experiment=f"テーブル/{source_key.split(':')[-1]}",
 )
 
-explain("tabular")
+# 解説の数式に、いまの交差検証の分割数を差し込む。
+explain("tabular", values={"K": int(n_splits)})

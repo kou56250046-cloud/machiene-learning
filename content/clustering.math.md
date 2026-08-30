@@ -3,7 +3,7 @@
 k-means の目的関数は、各点と自分の重心との距離の二乗和（クラスタ内平方和）です。
 
 ```math
-J = \sum_{k=1}^{K} \sum_{x \in C_k} \lVert x - \mu_k \rVert^{2}
+J = \sum_{k=1}^{@K:K@} \sum_{x \in C_k} \lVert x - \mu_k \rVert^{2}
 ```
 
 アルゴリズムの 2 手順は、この `J` を交互に下げているだけです。
@@ -34,8 +34,8 @@ J = \sum_{k=1}^{K} \sum_{x \in C_k} \lVert x - \mu_k \rVert^{2}
 距離ではなく **近傍に何点あるか** で判定します。
 
 ```math
-N_\varepsilon(x) = \{\, x' \mid \lVert x - x' \rVert \le \varepsilon \,\}, \qquad
-x \text{ がコア点} \iff |N_\varepsilon(x)| \ge \mathrm{minPts}
+N_\varepsilon(x) = \{\, x' \mid \lVert x - x' \rVert \le @eps:\varepsilon@ \,\}, \qquad
+x \text{ がコア点} \iff |N_\varepsilon(x)| \ge @minPts:\mathrm{minPts}@
 ```
 
 コア点どうしが `ε` でつながっていれば同じクラスタ、どのコア点にも届かない点はノイズ。**この定義には「形」の仮定がない** ので、つながってさえいれば三日月でも渦巻きでも取れます。

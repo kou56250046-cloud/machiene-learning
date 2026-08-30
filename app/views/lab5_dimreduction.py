@@ -271,4 +271,12 @@ st.caption(
     "大まかな違いを、後ろの主成分ほど細かい違いを捉えています。"
 )
 
-explain("dimensionality_reduction")
+# 解説に、いまの perplexity と PCA の寄与率を差し込む。
+explain(
+    "dimensionality_reduction",
+    values={
+        "perplexity": float(perplexity),
+        "K95": int(np.searchsorted(np.cumsum(evr), 0.95) + 1),
+        "evr2": round(float(evr[:2].sum()) * 100, 1),
+    },
+)

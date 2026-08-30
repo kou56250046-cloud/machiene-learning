@@ -531,4 +531,5 @@ EL.record_panel(
     default_experiment=f"テキスト/{dataset_name}",
 )
 
-explain("text")
+# 解説の数式に、いまの文書数とトピック数を差し込む。
+explain("text", values={"n": int(len(tokenized)), "K": int(n_topics)})

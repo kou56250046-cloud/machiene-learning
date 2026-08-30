@@ -6,11 +6,17 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pytest
 
-from app.components.explain import markdown_to_html, parse_blocks
+from app.components.explain import (
+    fill_blocks,
+    format_value,
+    markdown_to_html,
+    parse_blocks,
+)
 
 CONTENT_DIR = Path(__file__).resolve().parents[1] / "content"
 
@@ -160,3 +166,57 @@ def test_math_docs_contain_a_formula(path: Path) -> None:
     """「数式で見る」タブに数式が 1 つも無いことは無いはず。"""
     blocks = parse_blocks(path.read_text(encoding="utf-8"))
     assert any(kind == "latex" for kind, _ in blocks), f"{path.name} に数式が無い"
+
+
+# ---- スライダ値の差し込み ----------------------------------------------
+
+
+def test_slot_falls_back_when_no_value_is_given() -> None:
+    """値を渡さなければ代替 TeX が出る（解説は単体でも読める）。"""
+    blocks, filled = fill_blocks([("latex", "-@gamma:\\gamma@ x")], None)
+    assert blocks == [("latex", "-\\gamma x")]
+    assert filled == 0
+
+
+def test_slot_without_fallback_uses_its_name() -> None:
+    blocks, _ = fill_blocks([("latex", "@C@ \\sum x")], None)
+    assert blocks == [("latex", "C \\sum x")]
+
+
+def test_slot_is_filled_and_highlighted() -> None:
+    """数式は KaTeX の色指定、本文は span で「いまの値」だと分かるようにする。"""
+    blocks, filled = fill_blocks(
+        [("latex", "-@gamma:\\gamma@ x"), ("html", "<p>k = @k@</p>")],
+        {"gamma": 3.5, "k": 7},
+    )
+    assert blocks[0][1] == "-\\textcolor{#a8f04b}{3.5} x"
+    assert blocks[1][1] == '<p>k = <span class="mllab-live">7</span></p>'
+    assert filled == 2
+
+
+def test_unknown_slot_keeps_its_fallback() -> None:
+    """そのラボに無いパラメータは記号のまま残す（モデルを切り替えたとき）。"""
+    blocks, filled = fill_blocks([("latex", "@C:C@ + @gamma:\\gamma@")], {"C": 0.5})
+    assert blocks[0][1] == "\\textcolor{#a8f04b}{0.5} + \\gamma"
+    assert filled == 1
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        (7, "7"),
+        (12000, "12{,}000"),
+        (0.08, "0.08"),
+        (1.0 / 3, "0.3333"),
+        (0.0001, "1 \\times 10^{-4}"),
+    ],
+)
+def test_format_value(value: object, expected: str) -> None:
+    assert format_value(value) == expected
+
+
+@pytest.mark.parametrize("path", CONTENT_FILES, ids=lambda p: p.stem)
+def test_content_has_no_broken_slot(path: Path) -> None:
+    """閉じ忘れなどで `@名前:` が本文に出てしまわないこと。"""
+    html = markdown_to_html(path.read_text(encoding="utf-8"))
+    assert not re.search(r"@[A-Za-z_][A-Za-z0-9_]*:", html), f"{path.name} の差し込み口が壊れている"

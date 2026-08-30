@@ -224,6 +224,26 @@ div[class*="st-key-mllab-explain"] .katex-display {
   margin: 0;
 }
 
+/* いまのスライダ値を差し込んだ箇所（本文側）。数式側は KaTeX の色指定で揃える。 */
+.mllab-live {
+  color: var(--lime);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.mllab-live-note {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.2rem 0 0.9rem;
+  padding: 0.45rem 0.8rem;
+  background: rgba(168, 240, 75, 0.07);
+  border: 1px solid rgba(168, 240, 75, 0.3);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 div[class*="st-key-mllab-explain"] .katex {
   font-size: 1.05rem;
   color: var(--text);

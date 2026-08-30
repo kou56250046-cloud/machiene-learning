@@ -37,7 +37,7 @@ r_k = \frac{\sum_{t=k+1}^{n}(y_t - \bar{y})(y_{t-k} - \bar{y})}{\sum_{t=1}^{n}(y
 白色雑音なら `r_k` はおよそ `N(0, 1/n)` に従うので、信頼区間は次の幅になります。
 
 ```math
-\pm \frac{1.96}{\sqrt{n}}
+\pm \frac{1.96}{\sqrt{n}} \quad (n = @n:n@)
 ```
 
 **この帯を超えたラグだけが「偶然とは言えない」** — 画面の水色の帯がこれです。日次データで `r_7` が突き出ていれば週周期、`r_365` なら年周期です。
@@ -50,7 +50,7 @@ r_k = \frac{\sum_{t=k+1}^{n}(y_t - \bar{y})(y_{t-k} - \bar{y})}{\sum_{t=1}^{n}(y
 
 ```math
 \Delta y_t = y_t - y_{t-1}, \qquad
-\Delta_m y_t = y_t - y_{t-m} \;(\text{季節差分})
+\Delta_m y_t = y_t - y_{t-@m:m@} \;(\text{季節差分})
 ```
 
 ARIMA(`p,d,q`) の `d` は、この差分を何回取るかです。
@@ -78,6 +78,7 @@ MAPE は割合で見られますが、`y_t` が 0 付近で発散するという
 
 ```math
 \mathrm{MASE} = \frac{\mathrm{MAE}_{\text{モデル}}}{\frac{1}{n-m}\sum_{t=m+1}^{n}\bigl|y_t - y_{t-m}\bigr|}
+\quad (m = @m:m@)
 ```
 
 **`MASE < 1` で初めて、ナイーブ法に勝った** ということです。1 を超えるモデルには価値がありません。

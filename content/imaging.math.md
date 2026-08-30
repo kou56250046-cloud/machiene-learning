@@ -19,6 +19,7 @@
 
 ```math
 G_\sigma(i, j) = \frac{1}{2\pi\sigma^{2}}\exp\left(-\frac{i^{2}+j^{2}}{2\sigma^{2}}\right)
+\qquad (\sigma = @sigma:\sigma@)
 ```
 
 `σ` が大きいほど広い範囲を混ぜるので、細かい模様が消えます。ガウシアンは **縦と横に分けて 1 次元ずつ掛けられる**（分離可能）ので、`O(K²)` の計算が `O(2K)` で済みます。
@@ -94,7 +95,7 @@ X_f = \sum_{t=0}^{N-1} x_t \, e^{-2\pi i f t / N}, \qquad
 標本化周波数 `f_s` で観測できる上限は、その半分です。
 
 ```math
-f_{\text{Nyquist}} = \frac{f_s}{2}
+f_{\text{Nyquist}} = \frac{f_s}{2} = \frac{@fs:f_s@}{2} = @nyquist:f_s/2@ \;\mathrm{Hz}
 ```
 
 これを超える成分は消えるのではなく、**折り返して別の周波数に化けます**（エイリアシング）。

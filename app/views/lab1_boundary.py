@@ -211,4 +211,15 @@ else:
         "テスト精度（ピンク）が頭打ちになる手前が、だいたい良い設定になります。"
     )
 
-explain("decision_boundary")
+# 解説の数式に、いま選んでいるモデルのハイパーパラメータを差し込む。
+# C はロジスティック回帰と SVM で意味が違うので、選んでいる側の式にだけ入れる。
+live: dict[str, object] = {}
+if "C" in params:
+    live["C_logreg" if model_key == "logreg" else "C_svm"] = float(params["C"])
+if "gamma" in params:
+    live["gamma"] = float(params["gamma"])
+    live["gamma_width"] = 1.0 / np.sqrt(float(params["gamma"]))
+if "n_neighbors" in params:
+    live["k"] = int(params["n_neighbors"])
+
+explain("decision_boundary", values=live)

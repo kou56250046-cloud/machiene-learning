@@ -20,7 +20,7 @@
 次数 `d` の当てはめは、`x` を `d` 個の列に増やしただけの線形回帰です。
 
 ```math
-X = \begin{bmatrix} 1 & x_1 & x_1^{2} & \cdots & x_1^{d} \cr \vdots & & & & \vdots \cr 1 & x_n & x_n^{2} & \cdots & x_n^{d} \end{bmatrix},
+X = \begin{bmatrix} 1 & x_1 & x_1^{2} & \cdots & x_1^{@d:d@} \cr \vdots & & & & \vdots \cr 1 & x_{@n:n@} & x_{@n:n@}^{2} & \cdots & x_{@n:n@}^{@d:d@} \end{bmatrix},
 \qquad \hat{w} = (X^{\top}X)^{-1}X^{\top}y
 ```
 
@@ -29,13 +29,13 @@ X = \begin{bmatrix} 1 & x_1 & x_1^{2} & \cdots & x_1^{d} \cr \vdots & & & & \vdo
 ## Ridge — 対角に足して安定させる
 
 ```math
-\hat{w}_{\text{ridge}} = (X^{\top}X + \alpha I)^{-1}X^{\top}y
+\hat{w}_{\text{ridge}} = (X^{\top}X + @alpha_ridge:\alpha@ I)^{-1}X^{\top}y
 ```
 
 対角に `α` を足すだけで逆行列が安定します。直交する場合の効果は、各係数を一律に縮めることです。
 
 ```math
-\hat{w}_j = \frac{z_j}{1 + \alpha}
+\hat{w}_j = \frac{z_j}{1 + @alpha_ridge:\alpha@}
 ```
 
 `α → ∞` で係数は 0 に近づきますが、**きっかり 0 にはなりません**。だから Ridge では「0 になった係数」が増えません。
@@ -45,7 +45,7 @@ X = \begin{bmatrix} 1 & x_1 & x_1^{2} & \cdots & x_1^{d} \cr \vdots & & & & \vdo
 罰則を絶対値にすると、解はソフト閾値の形になります。
 
 ```math
-\hat{w}_j = \operatorname{sign}(z_j)\,\max\bigl(|z_j| - \alpha,\; 0\bigr)
+\hat{w}_j = \operatorname{sign}(z_j)\,\max\bigl(|z_j| - @alpha_lasso:\alpha@,\; 0\bigr)
 ```
 
 `|z_j| ≤ α` の係数は **きっかり 0** になります。これが特徴量選択そのものです。幾何的にも、L1 の制約領域 `Σ|w_j| ≤ t` は角（軸上の点）を持つ菱形なので、解が軸に触れやすくなります。L2 の制約領域は角のない球なので、軸に触れることはまずありません。
@@ -70,7 +70,7 @@ X = \begin{bmatrix} 1 & x_1 & x_1^{2} & \cdots & x_1^{d} \cr \vdots & & & & \vdo
 サンプル数 `n`、パラメータ数 `p` としたとき、汎化誤差のズレはおおむね `p/n` のオーダーで効きます。
 
 ```math
-\text{過学習の危険度} \;\sim\; \frac{p}{n}
+\text{過学習の危険度} \;\sim\; \frac{p}{n} = \frac{@p:p@}{@n:n@}
 ```
 
 **`p` を減らす（次数を下げる・正則化する）か、`n` を増やすか。** 対策が原理的にこの 2 択しかないことが、この式から読めます。サンプル数のスライダを下げると U 字の底が左（＝より低い次数）へ動くのは、`p/n` を一定に保とうとする動きです。
