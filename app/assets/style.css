@@ -194,13 +194,39 @@ section[data-testid="stSidebar"] .block-container {
 
 /* ---------- 解説ブロック ---------- */
 
-.mllab-explain {
+/* 解説全体の容れ物。タブや数式で中身が複数要素に割れても 1 枚のカードに見せる。 */
+div[class*="st-key-mllab-explain"] {
   background: var(--surface);
   border: 1px solid var(--border);
   border-left: 4px solid var(--accent, var(--cyan));
   border-radius: var(--radius);
   padding: 1.15rem 1.5rem 1.25rem;
   margin-top: 1.8rem;
+}
+
+/* 解説内のタブ（解説 / 数式で見る / 使いどころ） */
+div[class*="st-key-mllab-explain"] .stTabs [data-baseweb="tab-list"] {
+  margin-bottom: 0.5rem;
+}
+
+/* 数式（KaTeX）。st.latex が吐く .katex-display を式カードに仕立てる。 */
+div[class*="st-key-mllab-explain"] div[data-testid="stMarkdownContainer"]:has(> .katex-display) {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent, var(--cyan));
+  border-radius: 10px;
+  margin: 0.2rem 0 0.9rem;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+}
+
+div[class*="st-key-mllab-explain"] .katex-display {
+  margin: 0;
+}
+
+div[class*="st-key-mllab-explain"] .katex {
+  font-size: 1.05rem;
+  color: var(--text);
 }
 
 .mllab-explain h2 {
@@ -310,17 +336,24 @@ div[data-testid="stMetric"] {
   padding: 0.8rem 1rem;
 }
 
-.stTabs [data-baseweb="tab-list"] {
+.stTabs [data-baseweb="tab-list"],
+.stTabs [role="tablist"] {
   gap: 0.35rem;
   border-bottom: 1px solid var(--border);
 }
 
-.stTabs [data-baseweb="tab"] {
+.stTabs [data-baseweb="tab"],
+.stTabs [data-testid="stTab"] {
   border-radius: 9px 9px 0 0;
   padding: 0.45rem 1rem;
   color: var(--muted);
   font-weight: 600;
   font-size: 0.88rem;
+}
+
+.stTabs [data-testid="stTab"] p {
+  font-size: 0.88rem;
+  font-weight: 600;
 }
 
 .stTabs [aria-selected="true"] {

@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from app.components.explain import markdown_to_html
+from app.components.explain import markdown_to_html, parse_blocks
 
 CONTENT_DIR = Path(__file__).resolve().parents[1] / "content"
 
@@ -109,3 +109,54 @@ def test_content_starts_with_a_heading(path: Path) -> None:
         line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
     )
     assert first.startswith("#"), f"{path.name} が見出しで始まっていない"
+
+
+# ---- 数式（```math フェンス） ------------------------------------------
+
+
+def test_math_fence_becomes_a_latex_block() -> None:
+    """数式は HTML に混ぜず、st.latex へ渡すブロックとして切り出す。"""
+    blocks = parse_blocks("前。\n\n```math\nE = mc^2\n```\n\n後。")
+    kinds = [kind for kind, _ in blocks]
+    assert kinds == ["html", "latex", "html"]
+    assert blocks[1][1] == "E = mc^2"
+    assert "<p>前。</p>" in blocks[0][1]
+    assert "<p>後。</p>" in blocks[2][1]
+
+
+def test_math_fence_keeps_tex_untouched() -> None:
+    """TeX の記号を HTML エスケープや強調変換で壊さない。"""
+    tex = r"\lVert w \rVert^{2} + \sum_{i=1}^{n} x_i"
+    blocks = parse_blocks("```math\n" + tex + "\n```")
+    assert blocks == [("latex", tex)]
+
+
+def test_math_falls_back_to_pre_in_plain_html() -> None:
+    """KaTeX を使えない文脈では <pre> に落ちる（記号がそのまま出ない）。"""
+    html = markdown_to_html("```math\na < b\n```")
+    assert 'class="mllab-math"' in html
+    assert "a &lt; b" in html
+
+
+# ---- タブ 3 枚の構成 ---------------------------------------------------
+
+BASE_FILES = [p for p in CONTENT_FILES if "." not in p.stem]
+EXTRA_FILES = [p for p in CONTENT_FILES if "." in p.stem]
+
+
+def test_every_extra_doc_has_a_base_doc() -> None:
+    """`<topic>.math.md` / `<topic>.usecase.md` は解説本体とセットで置く。"""
+    topics = {p.stem for p in BASE_FILES}
+    for path in EXTRA_FILES:
+        topic, suffix = path.stem.rsplit(".", 1)
+        assert suffix in ("math", "usecase"), f"{path.name} は未対応の接尾辞"
+        assert topic in topics, f"{path.name} に対応する {topic}.md が無い"
+
+
+@pytest.mark.parametrize(
+    "path", [p for p in EXTRA_FILES if p.stem.endswith(".math")], ids=lambda p: p.stem
+)
+def test_math_docs_contain_a_formula(path: Path) -> None:
+    """「数式で見る」タブに数式が 1 つも無いことは無いはず。"""
+    blocks = parse_blocks(path.read_text(encoding="utf-8"))
+    assert any(kind == "latex" for kind, _ in blocks), f"{path.name} に数式が無い"
