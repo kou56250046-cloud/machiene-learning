@@ -38,6 +38,7 @@ PAGES = [
     st.Page("views/lab9_timeseries.py", title="9 時系列", icon="📉", url_path="timeseries"),
     st.Page("views/lab10_text.py", title="10 テキスト", icon="📰", url_path="text"),
     st.Page("views/lab11_imaging.py", title="11 画像・信号", icon="🖼️", url_path="imaging"),
+    st.Page("views/lab12_inventory.py", title="12 在庫・発注", icon="📦", url_path="inventory"),
     st.Page("views/experiments.py", title="実験ログ", icon="🧾", url_path="experiments"),
 ]
 
@@ -47,6 +48,8 @@ st.navigation(
         "基礎ラボ": PAGES[1:8],
         "データ基盤": PAGES[8:9],
         "応用ラボ": PAGES[9:13],
-        "記録": PAGES[13:],
+        # 予測して終わりではなく、意思決定と損益まで通すラボ
+        "業務シミュレーション": PAGES[13:14],
+        "記録": PAGES[14:],
     }
 ).run()

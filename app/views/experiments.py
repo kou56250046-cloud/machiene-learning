@@ -18,7 +18,7 @@ from mllab.viz import theme
 KEY = "explog"
 
 accent = page_header(
-    number=12,
+    number=20,
     title="実験ログ",
     lede=(
         "機械学習は「試して、比べて、また試す」の繰り返しです。"
@@ -50,7 +50,7 @@ if all_runs.empty:
         accent,
     )
     note(
-        "まだ記録がありません。**テーブルデータ・時系列・テキスト・画像**の各ラボの下部に "
+        "まだ記録がありません。<b>テーブルデータ・時系列・テキスト・画像</b>の各ラボの下部に "
         "「この結果を記録する」欄があります。設定を変えて何度か記録すると、ここで比較できます。",
         tone="warn",
     )

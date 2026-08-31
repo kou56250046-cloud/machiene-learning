@@ -144,3 +144,17 @@ def resolution_control(key: str, default: int = 160) -> int:
             help="高いほど境界がなめらかに見えますが、計算時間が延びます。",
         )
     )
+
+
+def spec_controls(
+    params: tuple[ParamSpec, ...], key: str, container=None
+) -> dict[str, Any]:
+    """`ParamSpec` の並びからそのままスライダ群を描く。
+
+    `param_controls` はモデル用に `ModelSpec` を受け取るが、こちらは
+    シミュレーションの環境設定のように、モデルに属さないつまみ向け。
+    定義側（`mllab/sim/inventory.py` の `WORLD_PARAMS` など）に足せば
+    画面を触らなくても増える。
+    """
+    ui = container if container is not None else st.sidebar
+    return {p.key: _one_control(ui, p, f"{key}_{p.key}") for p in params}

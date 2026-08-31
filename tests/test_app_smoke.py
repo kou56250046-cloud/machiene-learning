@@ -33,6 +33,7 @@ PAGES = [
     "lab9_timeseries.py",
     "lab10_text.py",
     "lab11_imaging.py",
+    "lab12_inventory.py",
     "experiments.py",
 ]
 
